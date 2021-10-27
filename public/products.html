@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>VER PRODUCTOS</title>
+</head>
+<body>
+    <h1 class="title">TABLA DE PRODUCTOS</h1>
+    <div class="div-table-products">
+        <table class="table-products">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>PRODUCTO</th>
+                    <th>PRECIO</th>
+                    <th>IMAGEN</th>
+                    <th>ELIMINAR</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+    
+            </tbody>
+        </table>
+
+    </div>
+    <script>
+
+        (async()=>{
+            try {
+                const response = await fetch("http://localhost:8080/productos");
+                const data = await response.json();
+                const $tbody = document.querySelector("#tbody");
+                console.log(data);
+                data.map(item => {
+                    const $tr = document.createElement("tr"),
+                        $td = document.createElement("td"),
+                        $button = document.createElement("button");
+                    $tr.innerHTML = `
+                        <td>${item.id}</td>
+                        <td>${item.title}</td>
+                        <td>${item.price}</td>
+                        <td class="td-image"><img src="${item.image}" alt="${item.title}"></td>
+                    `;
+                    $button.textContent = "ELIMINAR";
+                    $button.dataset.id = item.id;
+                    $button.addEventListener("click", deleteProduct);
+                    $td.appendChild($button);
+                    $tr.appendChild($td);
+
+
+                    return $tbody.appendChild($tr);
+                })
+                
+            } catch (error) {
+                console.log(error);
+            }
+        })()
+
+        const deleteProduct = async(e) => {
+            try {
+                const response = await fetch(`http://localhost:8080/productos/${e.target.dataset.id}`, {
+                method:"DELETE"
+                });
+                location.reload()
+            } catch (error) {
+                console.log(error);
+            }
+            
+
+        }
+
+
+
+
+    </script>
+</body>
+</html>
