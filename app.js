@@ -16,6 +16,7 @@ const productsRouter = require("./routes/productos");
 app.use("/productos", productsRouter);
 app.use("/", indexRouter);
 
-app.listen(8080,()=>{
+const server = app.listen(8080,()=>{
     console.log("Servidor web iniciado");
 })
+server.on("error", error => console.log("Error en el servidor", error));

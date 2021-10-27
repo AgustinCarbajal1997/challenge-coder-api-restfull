@@ -13,6 +13,7 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage });
 
+
 // OBTENER TODOS LOS PRODUCTOS
 router.get("/", (request, response)=>{
     fs.readFile(path.join(__dirname,"../public", "db.json"),(error, data)=>{
@@ -44,7 +45,9 @@ router.get("/:id", (request, response)=>{
             response.status(404).json({ error:"Ocurrio un error" })
         }else{
             let product = JSON.parse(data).find(item => item.id === parseInt(request.params.id));
-            response.json(product)
+            !product 
+                ? response.json({ error:"Producto no encontrado" })
+                : response.json(product) 
         }
     })
 })
